@@ -1,0 +1,19 @@
+FROM ghcr.io/puppeteer/puppeteer:latest
+
+# Switch to root user to install dependencies if needed, though Puppeteer image has most
+USER root
+
+WORKDIR /app
+
+# Copy package.json and install all dependencies
+COPY package*.json ./
+RUN npm install
+
+# Copy the server directory
+COPY server ./server
+
+# Expose the API port
+EXPOSE 4000
+
+# Start the Node.js backend
+CMD ["npm", "run", "server"]

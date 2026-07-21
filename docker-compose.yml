@@ -1,0 +1,68 @@
+version: '3.8'
+
+services:
+  frontend:
+    build:
+      context: .
+      dockerfile: Dockerfile.frontend
+    ports:
+      - "80:80"
+    depends_on:
+      - backend
+    restart: unless-stopped
+
+  backend:
+    build:
+      context: .
+      dockerfile: Dockerfile.backend
+    ports:
+      - "4000:4000"
+    environment:
+      - DATABASE_URL=postgresql://postgres:postgres@postgres:5432/shuyora
+      - REDIS_URL=redis://redis:6379
+      - MEILI_HOST=http://meilisearch:7700
+      - MEILI_MASTER_KEY=shuyora_master_key
+    depends_on:
+      - postgres
+      - redis
+      - meilisearch
+    restart: unless-stopped
+    # Required for Puppeteer to run inside Docker
+    cap_add:
+      - SYS_ADMIN
+
+  postgres:
+    image: postgres:15-alpine
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+      - POSTGRES_DB=shuyora
+    ports:
+      - "5432:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    restart: unless-stopped
+
+  redis:
+    image: redis:7-alpine
+    ports:
+      - "6379:6379"
+    volumes:
+      - redisdata:/data
+    restart: unless-stopped
+
+  meilisearch:
+    image: getmeili/meilisearch:v1.7
+    environment:
+      - MEILI_ENV=development
+      - MEILI_MASTER_KEY=shuyora_master_key
+    ports:
+      - "7700:7700"
+    volumes:
+      - meilidata:/meili_data
+    restart: unless-stopped
+
+volumes:
+  pgdata:
+  redisdata:
+  meilidata:
