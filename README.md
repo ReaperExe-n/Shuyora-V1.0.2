@@ -1,109 +1,45 @@
-<p align="center">
-<a href=https://github.com/fiskryeziu/zoroClone target="_blank">
-<img src='./src//assets//images/banner.png' width="100%" alt="Banner" />
-</a>
-</p>
+# 📺 Shuyora
 
+Shuyora is a modern, high-performance anime streaming platform built with React, Vite, and Express.
 
+## 🚀 Features
+- **Fast & Responsive UI**: Built with React and optimized with Vite.
+- **Real-time Sync**: Watch anime together with friends using the WatchParty feature.
+- **Secure Authentication**: Built-in JWT authentication with HttpOnly cookies.
+- **Dynamic Streaming**: Custom backend proxy and caching architecture for lightning-fast playback.
+- **Full History Tracking**: Automatically saves your watch progress and synchronizes episode tracking.
 
-<p align="center">
-<img src="https://img.shields.io/github/languages/code-size/fiskryeziu/zoroClone" alt="GitHub code size in bytes" />
-<img src="https://img.shields.io/github/last-commit/fiskryeziu/zoroClone" alt="GitHub last commit" />
-<img src="https://img.shields.io/github/commit-activity/m/fiskryeziu/zoroClone" alt="GitHub commit activity month" />
-</p>
+## 🛠️ Tech Stack
+- **Frontend**: React, Vite, Styled Components, React Router
+- **Backend**: Express.js, PostgreSQL, Redis, Socket.io
+- **Caching & Proxy**: Integrated hybrid cache (In-Memory + Redis) and robust SSRF protection.
 
-<p></p>
-<p></p>
+## ⚙️ Getting Started
 
-# 📌 Overview
+1. **Install Dependencies**
+   ```bash
+   # In the root folder
+   npm install
+   
+   # In the server folder
+   cd server && npm install
+   ```
 
-ZoroClone: A ReactJS Anime Website Clone 🗡️📺 – Emulate the magic of aniwatch.to with this project, offering a replica of the popular anime streaming website.
+2. **Start the Development Servers**
+   ```bash
+   # Start the Express backend (runs on port 4000)
+   npm run server
+   
+   # Start the React frontend
+   npm run dev
+   ```
 
-## 🔍 Table of Contents
+## 🛡️ Security Updates
+Shuyora includes custom enterprise-grade security patches:
+- Comprehensive XSS protection using DOMPurify.
+- Rate-limited API routes to prevent DDoS.
+- Secure, HttpOnly JWT implementation (no localStorage vulnerabilities).
+- Advanced SSRF blocking on all video proxies and metadata endpoints.
 
-* [📁 Project Structure](#-project-structure)
-
-* [📝 Project Summary](#-project-summary)
-
-* [💻 Stack](#-stack)
-
-* [⚙️ Setting Up](#-setting-up)
-
-* [🚀 Run Locally](#-run-locally)
-
-* [🙌 Contributors](#-contributors)
-
-* [☁️ Deploy](#-deploy)
-
-## 📁 Project Structure
-
-```bash
-├── .github
-├── .gitignore
-├── CONTRIBUTING.md
-├── index.html
-├── package-lock.json
-├── package.json
-├── public
-├── src
-│   ├── App.jsx
-│   ├── assets
-│   ├── components
-│   ├── hooks
-│   ├── index.css
-│   ├── main.jsx
-│   └── pages
-└── vite.config.js
-```
-
-## 📝 Project Summary
-
-- [**src**](src): Main source directory containing all the JavaScript code for the project.
-- [**src/components**](src/components): Directory for reusable UI components used throughout the project.
-- [**src/pages**](src/pages): Directory for individual page components of the application.
-- [**src/assets**](src/assets): Directory for storing static assets like images used in the project.
-- [**src/hooks**](src/hooks): Directory for custom React hooks used in the project.
-- [**public**](public): Directory for public assets like HTML file and favicon.
-
-## 💻 Stack
-
-- [react-query](https://react-query.tanstack.com/): Data fetching and state management library.
-- [axios](https://axios-http.com/): HTTP client for making API requests.
-- [date-fns](https://date-fns.org/): Utility library for working with dates and times.
-- [react](https://reactjs.org/): JavaScript library for building user interfaces.
-- [react-icons](https://react-icons.github.io/react-icons/): Icon library for React applications.
-- [react-router-dom](https://reactrouter.com/web/guides/quick-start): Routing library for React applications.
-- [styled-components](https://styled-components.com/): Library for styling React components with CSS.
-
-## ⚙️ Setting Up
-
-## 🚀 Run Locally
-1.Clone the zoroClone repository:
-```sh
-git clone https://github.com/fiskryeziu/zoroClone
-```
-2.Install the dependencies with one of the package managers listed below:
-```bash
-pnpm install
-bun install
-npm install
-yarn install
-```
-3.Start the development mode:
-```bash
-pnpm dev
-bun dev
-npm run dev
-yarn dev
-```
-
-## 🙌 Contributors
-<a href="https://github.com/fiskryeziu/zoroClone/graphs/contributors">
-<img src="https://contrib.rocks/image?repo=fiskryeziu/zoroClone" />
-</a>
-
-## ☁️ Deploy
-
-`[Application name](Your App URL)`
-
-
+---
+*Built by ReaperExe-n*
