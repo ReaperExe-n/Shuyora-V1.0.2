@@ -10,9 +10,9 @@ import AuthModal from '../components/AuthModal';
 import { Helmet } from 'react-helmet-async';
 import { MangaModal, ReportModal, RecapModal, WatchOrderModal } from '../components/WatchModals';
 import JapaneseDictionary from '../components/JapaneseDictionary';
-import { FaList, FaThLarge, FaSearch, FaBell, FaKeyboard, FaLightbulb, FaStepForward, FaStepBackward, FaPlay, FaClosedCaptioning, FaMicrophone, FaEye, FaImage, FaChevronDown, FaDownload, FaShareAlt, FaBug, FaBolt, FaBook, FaHistory, FaRoute, FaLanguage, FaStar } from 'react-icons/fa';
+import { FaList, FaThLarge, FaSearch, FaBell, FaKeyboard, FaLightbulb, FaStepForward, FaStepBackward, FaPlay, FaClosedCaptioning, FaMicrophone, FaEye, FaImage, FaChevronDown, FaDownload, FaShareAlt, FaBug, FaBolt, FaBook, FaHistory, FaRoute, FaLanguage, FaStar, FaFolderOpen } from 'react-icons/fa';
 
-const API_BASE = import.meta.env.VITE_API_BASE || `http://${window.location.hostname}:4000`;
+const API_BASE = import.meta.env.VITE_API_BASE || `http://${window.location.hostname}:4001`;
 
 const Container = styled.div`
   min-height: 100vh;
@@ -26,11 +26,18 @@ const Container = styled.div`
   @media (max-width: 1024px) {
     overflow-y: auto;
   }
+
+  @media (max-width: 768px) {
+    padding-top: 110px;
+  }
+  @media (max-width: 480px) {
+    padding-top: 110px;
+  }
 `;
 
 const TheaterLayout = styled.div`
   display: flex;
-  max-width: ${p => p.$isTheaterMode ? '100%' : '1920px'};
+  max-width: 100%;
   width: 100%;
   margin: 0 auto;
   padding: ${p => p.$isTheaterMode ? '20px 24px' : '20px 464px 20px 24px'};
@@ -41,13 +48,13 @@ const TheaterLayout = styled.div`
   
 
   @media (max-width: 1024px) {
-
     flex-direction: column;
-
     padding: 20px 24px;
-
   }
 
+  @media (max-width: 480px) {
+    padding: 12px 8px;
+  }
 `;
 
 
@@ -149,23 +156,25 @@ const ServerControlContainer = styled.div`
 
 
   @media (max-width: 768px) {
-
     align-items: flex-start;
-
   }
 
+  @media (max-width: 480px) {
+    gap: 8px;
+  }
 `;
 
 
 
 const ControlCluster = styled.div`
-
   display: flex;
-
   align-items: flex-end;
-
   gap: 16px;
 
+  @media (max-width: 480px) {
+    flex-wrap: wrap;
+    gap: 8px;
+  }
 `;
 
 
@@ -339,19 +348,16 @@ const DropdownItem = styled.div`
 
 
 const ActionButtonsRow = styled.div`
-
   display: flex;
-
   align-items: center;
-
   gap: 8px;
-
   margin-top: auto;
-
   padding-bottom: 2px;
-
   flex-wrap: wrap;
 
+  @media (max-width: 480px) {
+    gap: 4px;
+  }
 `;
 
 
@@ -399,11 +405,16 @@ const ActionButton = styled.button`
   }
 
   &:hover svg {
-
     color: #fff;
-
   }
 
+  @media (max-width: 480px) {
+    padding: 6px 8px;
+    font-size: 0;
+    svg {
+      font-size: 14px;
+    }
+  }
 `;
 
 
@@ -517,33 +528,30 @@ const EpisodeSidebar = styled.div`
   
 
   @media (max-width: 1024px) {
-
     position: static;
-
     width: 100%;
-
     margin-top: 20px;
-
     height: 500px;
-
   }
 
+  @media (max-width: 480px) {
+    height: auto;
+    max-height: 350px;
+  }
 `;
 
 
 
 const SidebarHeader = styled.div`
-
   padding: 16px;
-
   border-bottom: 1px solid var(--border-color);
-
   display: flex;
-
   align-items: center;
-
   gap: 8px; /* tighter gap for exact match */
 
+  @media (max-width: 480px) {
+    flex-wrap: wrap;
+  }
 `;
 
 
@@ -583,20 +591,18 @@ const SeasonSelect = styled.select`
 
 
 const SearchInput = styled.div`
-
   flex: 1;
-
   background: transparent;
-
   border: 1px solid rgba(255,255,255,0.15);
-
   border-radius: 6px;
-
   padding: 6px 10px;
-
   display: flex;
-
   align-items: center;
+
+  @media (max-width: 480px) {
+    min-width: 0;
+    flex: 1 1 100%;
+  }
 
   gap: 8px;
 
@@ -867,13 +873,14 @@ const EpCard = styled.div`
   
 
   /* Hover Effects */
-
   &:hover { 
-
     background: ${p => p.active ? '#b1a1ea' : '#1e1e1e'}; 
-
   }
 
+  @media (max-width: 480px) {
+    height: auto;
+    min-height: 70px;
+  }
 `;
 
 
@@ -909,15 +916,14 @@ const EpThumb = styled.div`
   
 
   /* Hover zoom effect */
-
   ${EpCard}:hover img { 
-
     opacity: 1; 
-
     transform: scale(1.05); 
-
   }
 
+  @media (max-width: 480px) {
+    display: none;
+  }
 `;
 
 
@@ -993,13 +999,14 @@ const EpDesc = styled.div`
   display: -webkit-box;
 
   -webkit-line-clamp: 3; /* Matches Miruro 3 line description */
-
   -webkit-box-orient: vertical;
-
   overflow: hidden;
 
   margin-bottom: 4px;
 
+  @media (max-width: 480px) {
+    display: none;
+  }
 `;
 
 
@@ -1341,43 +1348,36 @@ const DetailsWrapper = styled.div`
   
 
   @media (max-width: 1024px) {
-
     flex-direction: column;
-
     padding: 0 24px 40px 24px;
-
   }
 
+  @media (max-width: 480px) {
+    padding: 12px;
+  }
 `;
 
 
 
 const DetailsSection = styled.div`
-
   width: 100%;
-
   display: flex;
-
   gap: 24px;
-
   background: rgba(255,255,255,0.02);
-
   border: 1px solid var(--border-color);
-
   border-radius: 12px;
-
   padding: 24px;
-
   color: var(--text-primary);
 
-  
-
   @media (max-width: 768px) {
-
-    flex-direction: column;
-
+    gap: 16px;
   }
 
+  @media (max-width: 480px) {
+    padding: 12px;
+    gap: 12px;
+    flex-wrap: wrap;
+  }
 `;
 
 
@@ -1402,6 +1402,18 @@ const DetailsLeft = styled.div`
 
   }
 
+  @media (max-width: 768px) {
+    flex: 0 0 auto;
+    width: 150px;
+  }
+
+  @media (max-width: 480px) {
+    width: 120px;
+
+    img {
+      border-radius: 8px;
+    }
+  }
 `;
 
 
@@ -1421,17 +1433,15 @@ const DetailsRight = styled.div`
 
 
 const AnimeTitleText = styled.h1`
-
   font-size: 28px;
-
   font-weight: 800;
-
   margin: 0;
-
   color: var(--text-primary);
-
   letter-spacing: -0.5px;
 
+  @media (max-width: 480px) {
+    font-size: 20px;
+  }
 `;
 
 
@@ -1481,120 +1491,151 @@ const RelatedSidebar = styled.div`
   
 
   @media (max-width: 1024px) {
-
     position: static;
-
     width: 100%;
-
     margin-top: 24px;
-
   }
 
+  @media (max-width: 480px) {
+    padding: 0;
+  }
 `;
 
 
 
 const RelatedCard = styled.div`
-
   display: flex;
-
   gap: 12px;
-
   cursor: pointer;
-
   padding: 8px;
-
   border-radius: 8px;
-
   transition: background 0.2s;
-
   
-
   &:hover {
-
     background: rgba(255,255,255,0.05);
-
   }
-
-  
 
   img {
-
     width: 60px;
-
-    height: 80px;
-
+    height: 85px;
     object-fit: cover;
-
     border-radius: 6px;
-
   }
-
-  
 
   .info {
-
     display: flex;
-
     flex-direction: column;
-
     justify-content: center;
-
+    gap: 6px;
     flex: 1;
 
+    .title {
+      color: #fff;
+      font-size: 13px;
+      font-weight: 700;
+      display: -webkit-box;
+      -webkit-line-clamp: 2;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+
+      .blue-dot {
+        color: #3498db;
+        margin-right: 6px;
+      }
+    }
+
+    .meta {
+      display: flex;
+      gap: 12px;
+      font-size: 11px;
+      color: #888;
+      font-weight: 600;
+    }
+  }
+`;
+
+const SeasonsContainer = styled.div`
+  margin-bottom: 8px;
+`;
+
+const SeasonsHeader = styled.div`
+  font-size: 16px;
+  font-weight: 900;
+  color: #fff;
+  margin-bottom: 12px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  text-transform: uppercase;
+`;
+
+const SeasonsGrid = styled.div`
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+  
+  @media (max-width: 480px) {
+    gap: 8px;
+  }
+`;
+
+const SeasonCard = styled.div`
+  position: relative;
+  height: 80px;
+  border-radius: 8px;
+  overflow: hidden;
+  cursor: pointer;
+  background: #111;
+  border: 1px solid rgba(255,255,255,0.1);
+  transition: all 0.2s ease;
+  
+  &:hover {
+    border-color: var(--primary-color);
+    transform: scale(1.02);
+    
+    img {
+      opacity: 0.6;
+    }
   }
 
-  
+  img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    opacity: 0.35;
+    transition: all 0.3s ease;
+  }
 
   .title {
-
-    color: var(--text-primary);
-
-    font-size: 14px;
-
-    font-weight: 800;
-
-    line-height: 1.4;
-
-    display: -webkit-box;
-
-    -webkit-line-clamp: 2;
-
-    -webkit-box-orient: vertical;
-
-    overflow: hidden;
-
-  }
-
-  
-
-  .blue-dot {
-
-    color: #00b0f0;
-
-    margin-right: 6px;
-
-  }
-
-  
-
-  .meta {
-
-    color: var(--text-secondary);
-
-    font-size: 11px;
-
-    margin-top: 6px;
-
+    position: absolute;
+    inset: 0;
     display: flex;
-
     align-items: center;
-
-    gap: 6px;
-
+    justify-content: center;
+    text-align: center;
+    font-weight: 800;
+    font-size: 14px;
+    color: #fff;
+    text-shadow: 0 2px 4px rgba(0,0,0,0.9);
+    padding: 8px;
+    pointer-events: none;
+    z-index: 2;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
   }
-
+  
+  ${p => p.$active && `
+    border-color: var(--primary-color);
+    box-shadow: 0 0 10px rgba(168, 129, 230, 0.3);
+    .title {
+      color: #a881e6;
+    }
+  `}
 `;
+
+
 
 
 
@@ -1667,55 +1708,30 @@ const Synopsis = styled.div`
 
 
 const MetaGrid = styled.div`
-
   display: grid;
-
   grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
-
   gap: 20px;
-
   margin-top: 10px;
-
 `;
 
-
-
 const MetaItem = styled.div`
-
   display: flex;
-
   flex-direction: column;
-
   gap: 6px;
 
-  
-
   .label {
-
     font-size: 11px;
-
     color: var(--text-muted);
-
     text-transform: uppercase;
-
     font-weight: 700;
-
     letter-spacing: 0.5px;
-
   }
-
-  
 
   .value {
-
     font-size: 13px;
-
     color: #eee;
-
     font-weight: 600;
-
   }
-
 `;
 
 
@@ -2049,8 +2065,8 @@ const Watch = () => {
   const [isTheaterMode, setIsTheaterMode] = useState(false);
 
   const [error, setError] = useState(null);
-
   const [animeInfo, setAnimeInfo] = useState(null);
+  const [franchiseSeasons, setFranchiseSeasons] = useState([]);
 
   const [viewMode, setViewMode] = useState('list');
 
@@ -2146,36 +2162,68 @@ const Watch = () => {
 
 
         const infoRes = await axios.get(`${API_BASE}/info/${animeId}`);
-
         setAnimeInfo(infoRes.data);
-
         const title = infoRes.data.title.english || infoRes.data.title.romaji || "Anime";
-
         document.title = `Watch ${title} - Shuyora`;
 
+        try {
+          const baseQuery = (infoRes.data.title.romaji || infoRes.data.title.english || "").split(' ').slice(0, 2).join(' ');
+          const searchRes = await axios.get(`${API_BASE}/api/search?q=${encodeURIComponent(baseQuery)}`);
+          const results = searchRes.data?.value || searchRes.data || [];
+          const filtered = results.filter(r => ['TV', 'MOVIE'].includes(r.format) && r.episodes != null && r.episodes > 0 && r.seasonYear != null);
+          // Deduplicate by ID
+          const uniqueSeasons = Array.from(new Map(filtered.map(item => [item.id, item])).values());
+          uniqueSeasons.sort((a, b) => (a.seasonYear || 0) - (b.seasonYear || 0));
+          setFranchiseSeasons(uniqueSeasons.slice(0, 6));
+        } catch (e) {
+          console.error('Failed to fetch franchise seasons', e);
+        }
 
 
-        const epsRes = await axios.get(`${API_BASE}/episodes/${animeId}`);
+
+        let epsRes = { data: { providers: {} } };
+        try {
+          epsRes = await axios.get(`${API_BASE}/episodes/${animeId}`);
+        } catch (err) {
+          console.warn("No episodes found for this ID (might be unaired or a movie without streams).");
+        }
 
         const providers = epsRes.data.providers || {};
-
         const pNames = Object.keys(providers);
-
         
+        const nowBuffer = new Date();
+        nowBuffer.setDate(nowBuffer.getDate() + 2); // 2 days buffer
 
+        // Clean providersData to remove unaired/future episodes
+        pNames.forEach(pName => {
+           if (providers[pName] && providers[pName].episodes) {
+               ['sub', 'dub'].forEach(lang => {
+                  if (providers[pName].episodes[lang]) {
+                      providers[pName].episodes[lang] = providers[pName].episodes[lang].filter(ep => {
+                          if (!ep.airDate) return true;
+                          const airD = new Date(ep.airDate);
+                          if (isNaN(airD)) return true;
+                          return airD <= nowBuffer;
+                      });
+                      if (providers[pName].episodes[lang].length === 0) {
+                          delete providers[pName].episodes[lang];
+                      }
+                  }
+               });
+           }
+        });
+
+        setProvidersData(providers);
+
+        // Find best server for initial state
+        const preferredOrder = [...new Set(['bonk', 'kiwi', 'hop', 'pewe', 'moo', 'bee', 'ally', ...pNames])];
+        let bestServer = null;
+        let compiledEps = { sub: null, dub: null };
         if (pNames.length > 0) {
 
           // Find the best 'sub' and 'dub' lists across all available providers
 
-          const compiledEps = {};
 
-          
-
-          setProvidersData(providers);
-
-          let bestServer = null;
-
-          
 
           // Prioritize providers that provide raw m3u8 streams (bonk, kiwi) over IP-locked providers (ally)
 
@@ -2250,13 +2298,9 @@ const Watch = () => {
         setLoading(false);
 
       } catch (err) {
-
         console.error(err);
-
-        setError("Anime not found or no episodes available for this ID.");
-
+        setError(`Error: ${err.message} | ${err.stack}`);
         setLoading(false);
-
       }
 
     };
@@ -2287,24 +2331,41 @@ const Watch = () => {
     
 
     const raceServers = async () => {
-
-      const allServers = Object.keys(providersData).filter(p => providersData[p].episodes && providersData[p].episodes[audioLang]);
+      const globalPreferred = ['bonk', 'kiwi', 'hop', 'pewe', 'moo', 'bee', 'ally'];
+      
+      // Sort servers by preference and only race the top 3 available ones (allowlist)
+      const allServers = Object.keys(providersData)
+         .filter(p => providersData[p].episodes && providersData[p].episodes[audioLang])
+         .sort((a, b) => {
+             const idxA = globalPreferred.indexOf(a) !== -1 ? globalPreferred.indexOf(a) : 99;
+             const idxB = globalPreferred.indexOf(b) !== -1 ? globalPreferred.indexOf(b) : 99;
+             return idxA - idxB;
+         })
+         .slice(0, 3); // ONLY race the top 3 to prevent API spam
 
       if (allServers.length < 2) return;
-
       
-
       setIsRacing(true);
-
       const ac = new AbortController();
-
       
-
+      const wait = (ms, signal) => new Promise((resolve, reject) => {
+          if (signal?.aborted) return reject(new Error('Aborted'));
+          const t = setTimeout(resolve, ms);
+          if (signal) {
+              signal.addEventListener('abort', () => {
+                  clearTimeout(t);
+                  reject(new Error('Aborted'));
+              }, { once: true });
+          }
+      });
+      
       try {
-
         const winner = await Promise.any(
-
-          allServers.map(async (serverName) => {
+          allServers.map(async (serverName, index) => {
+             // Happy Eyeballs stagger: delay backup servers so the primary server has a head start
+             if (index > 0) {
+                 await wait(index * 300, ac.signal);
+             }
 
              const ep = providersData[serverName].episodes[audioLang][currentEpisodeIndex];
 
@@ -2384,10 +2445,8 @@ const Watch = () => {
 
     
 
-    // Server race causes 429 Too Many Requests on the new API
-
-    // raceServers();
-
+    // Safe to race servers now using Happy Eyeballs stagger
+    raceServers();
   }, [currentEpisodeIndex, episodes.length, providersData, audioLang]);
 
 
@@ -2517,32 +2576,35 @@ const Watch = () => {
 
       const handleServerFallback = (failedServer) => {
 
-        const preferredOrder = ['bonk', 'kiwi', 'hop', 'pewe', 'moo', 'bee', 'ally', ...Object.keys(providersData)];
+        const preferredOrder = [...new Set(['bonk', 'kiwi', 'hop', 'pewe', 'moo', 'bee', 'ally', ...Object.keys(providersData)])];
 
         const currentIndex = preferredOrder.indexOf(failedServer);
 
         if (currentIndex !== -1) {
-
            for (let i = currentIndex + 1; i < preferredOrder.length; i++) {
-
               const nextServer = preferredOrder[i];
-
               if (providersData[nextServer] && providersData[nextServer].episodes[audioLang]) {
-
                  console.log(`Auto-fallback: ${failedServer} failed, switching to ${nextServer}`);
-
                  setSelectedServer(nextServer);
-
                  return true;
-
               }
-
            }
-
         }
-
+        
+        // If all servers for current language fail, try the other language
+        const otherLang = audioLang === 'sub' ? 'dub' : 'sub';
+        for (let i = 0; i < preferredOrder.length; i++) {
+           const nextServer = preferredOrder[i];
+           if (providersData[nextServer] && providersData[nextServer].episodes[otherLang]) {
+              console.log(`All servers failed for ${audioLang}. Auto-falling back to ${otherLang} on server ${nextServer}`);
+              setAudioLang(otherLang);
+              setEpisodes(providersData[nextServer].episodes[otherLang]);
+              setSelectedServer(nextServer);
+              return true;
+           }
+        }
+        
         return false;
-
       };
 
 
@@ -2579,7 +2641,7 @@ const Watch = () => {
 
           // Wrap stream URLs with local CORS proxy, but leave embeds untouched
 
-          if (watchRes.data && watchRes.data.streams) {
+          if (watchRes.data && watchRes.data.streams && watchRes.data.streams.length > 0) {
 
              const processedStreams = watchRes.data.streams.map(s => {
 
@@ -2605,80 +2667,44 @@ const Watch = () => {
 
              
 
-             // Automatically ping the stream to verify it works, even if there's only 1 stream
-
+             // Automatically ping the streams to find the fastest one, ONLY if there are multiple choices
              const videoStreams = processedStreams.filter(s => s.type !== 'embed');
 
-             if (videoStreams.length > 0) {
-
+             if (videoStreams.length > 1) {
                  const ac = new AbortController();
-
                  const promises = videoStreams.map(s => 
-
                     fetch(s.url, { credentials: 'include', signal: ac.signal })
-
                       .then(r => {
-
                          const contentType = r.headers.get('content-type') || '';
-
                          if ((r.ok || r.status === 206) && !contentType.includes('text/html')) return s;
-
                          throw new Error('Not OK');
-
                       })
-
                  );
-
                  
-
                  Promise.any(promises).then(fastest => {
-
                     ac.abort();
-
                     let finalStreams = processedStreams;
-
                     if (fastest !== videoStreams[0]) {
-
                       console.log("Auto-switching to fastest stream inside server:", fastest.server || 'Unknown');
-
                       finalStreams = [fastest, ...processedStreams.filter(s => s !== fastest)];
-
                     }
-
                     setStreamData({ ...watchRes.data, streams: finalStreams });
-
                     setLoading(false);
-
                  }).catch(e => {
-
                     console.log('All streams for server failed ping test:', selectedServer);
-
                     const didFallback = handleServerFallback(selectedServer);
-
                     if (!didFallback) {
-
                        setError("Failed to fetch stream sources on all servers.");
-
                        setLoading(false);
-
                     }
-
                  });
-
              } else {
-
-                 setStreamData({ ...watchRes.data });
-
+                 setStreamData({ ...watchRes.data, streams: processedStreams });
                  setLoading(false);
-
              }
 
           } else {
-
-            setStreamData(watchRes.data);
-
-            setLoading(false);
-
+             throw new Error("No streams returned from provider");
           }
 
         } catch (err) {
@@ -2773,7 +2799,7 @@ const Watch = () => {
 
       try {
 
-        await fetch('http://localhost:4001/reward', { credentials: 'include',
+        await fetch("http://$(${window.location.hostname}):4001/reward", { credentials: 'include',
 
           method: 'POST',
 
@@ -3056,9 +3082,15 @@ const Watch = () => {
                     onProgress={handleProgress}
 
                     onToggleTheater={() => setIsTheaterMode(!isTheaterMode)}
-
                     initialTime={initialTime}
-
+                    onError={() => {
+                       console.log("CustomPlayer reported a fatal error. Triggering fallback.");
+                       const didFallback = handleServerFallback(selectedServer);
+                       if (!didFallback) {
+                          setError("Failed to play the video. All streams and backups failed.");
+                          setLoading(false);
+                       }
+                    }}
                   />
 
                 );
@@ -3225,7 +3257,7 @@ const Watch = () => {
 
                   <EpThumb active={isActive}>
 
-                    <img src={ep.image || ep.thumbnail || ep.img || animeInfo?.bannerImage || animeInfo?.coverImage?.large} alt={`Ep ${ep.number}`} />
+                    <img loading="lazy" src={ep.image || ep.thumbnail || ep.img || animeInfo?.bannerImage || animeInfo?.coverImage?.large} alt={`Ep ${ep.number}`} />
 
                     <EpBadge>EP {ep.number}</EpBadge>
 
@@ -3235,7 +3267,7 @@ const Watch = () => {
 
                     <EpTitle active={isActive}>
 
-                      📺 EP {ep.number} - {ep.title || `Episode ${ep.number}`}
+                      {ep.title || `Episode ${ep.number}`}
 
                       {isFiller && <span style={{ marginLeft: '8px', fontSize: '9px', background: 'rgba(255,77,77,0.2)', color: '#ff4d4d', padding: '2px 6px', borderRadius: '4px', textTransform: 'uppercase' }}>Filler</span>}
 
@@ -3243,7 +3275,7 @@ const Watch = () => {
 
                     <EpDesc>
 
-                      📝 {ep.description || ep.desc || `Watch Episode ${ep.number} of ${animeInfo?.title?.english || animeInfo?.title?.romaji || 'this anime'}.`}
+                      {ep.description || ep.desc || `Watch Episode ${ep.number} of ${animeInfo?.title?.english || animeInfo?.title?.romaji || 'this anime'}.`}
 
                     </EpDesc>
 
@@ -3284,15 +3316,10 @@ const Watch = () => {
       {animeInfo && (
 
         <DetailsWrapper $isTheaterMode={isTheaterMode}>
-
           <DetailsSection>
-
             <DetailsLeft>
-
-              <img src={animeInfo.coverImage?.extraLarge || animeInfo.coverImage?.large} alt="Cover" />
-
+              <img loading="lazy" src={animeInfo.coverImage?.extraLarge || animeInfo.coverImage?.large} alt="Cover" />
             </DetailsLeft>
-
             <DetailsRight>
 
               <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', flexWrap: 'wrap', gap: '16px' }}>
@@ -3305,11 +3332,10 @@ const Watch = () => {
 
                 </div>
 
-                
+              {/* Server controls hidden on mobile, shown on desktop */}
+              <ServerControlContainer className="desktop-server-controls">
 
-                <ServerControlContainer>
-
-                  <ControlCluster>
+                <ControlCluster>
 
                     <SelectorGroup>
 
@@ -3616,61 +3642,89 @@ const Watch = () => {
                 )}
 
               </MetaGrid>
-
             </DetailsRight>
-
           </DetailsSection>
 
           
 
           {animeInfo.relations?.edges?.length > 0 && (
-
             <RelatedSidebar $isTheaterMode={isTheaterMode}>
-
-              <div style={{ fontSize: '16px', fontWeight: 900, color: '#fff', marginBottom: '8px' }}>&gt; RELATED</div>
-
-              {animeInfo.relations.edges.slice(0, 6).map((edge, idx) => {
-
-                const item = edge.node;
-
-                if (!item || item.type !== 'ANIME') return null;
-
-                return (
-
-                  <RelatedCard key={item.id || idx} onClick={() => navigate(`/watch/${item.id}`)}>
-
-                    <img src={item.coverImage?.large} alt={item.title?.english || item.title?.romaji} />
-
-                    <div className="info">
-
-                      <div className="title">
-
-                        <span className="blue-dot">•</span>
-
-                        {item.title?.english || item.title?.romaji}
-
-                      </div>
-
-                      <div className="meta">
-
-                        <span>{item.format}</span>
-
-                        <span>📺 {item.episodes || '?'}</span>
-
-                        <span>⭐ {item.meanScore || item.averageScore || '?'}</span>
-
-                      </div>
-
-                    </div>
-
-                  </RelatedCard>
-
+              
+              {(() => {
+                // Separate seasons from other related content
+                const otherEdges = animeInfo.relations.edges.filter(e => 
+                  e.node?.type === 'ANIME' && 
+                  !['PREQUEL', 'SEQUEL', 'PARENT', 'SIDE_STORY'].includes(e.relationType)
                 );
 
-              })}
+                // Helper to format season names cleanly
+                const formatSeasonTitle = (title, format) => {
+                   const t = title.toLowerCase();
+                   if (t.includes('season 1') || t.includes('1st season')) return 'Season 1';
+                   if (t.includes('season 2') || t.includes('2nd season')) return 'Season 2';
+                   if (t.includes('season 3') || t.includes('3rd season')) return 'Season 3';
+                   if (t.includes('season 4') || t.includes('4th season')) return 'Season 4';
+                   if (t.includes('season 5') || t.includes('5th season')) return 'Season 5';
+                   if (format === 'MOVIE') return 'Movie';
+                   if (format === 'OVA' || format === 'SPECIAL' || format === 'ONA') return 'Specials';
+                   return title.length > 25 ? title.substring(0, 22) + '...' : title;
+                };
 
+                return (
+                  <>
+                    {franchiseSeasons.length > 0 && (
+                      <SeasonsContainer>
+                        <SeasonsHeader>
+                          <FaFolderOpen size={14} /> SEASONS
+                        </SeasonsHeader>
+                        <SeasonsGrid>
+                          {franchiseSeasons.map((season, idx) => {
+                            const isCurrent = season.id.toString() === animeId.toString();
+                            const displayTitle = isCurrent ? "Current" : formatSeasonTitle(season.title?.english || season.title?.romaji || season.title_english || season.title_romaji || '', season.format);
+                            const imgUrl = season.coverImage?.large || season.coverImage || season.bannerImage;
+                            
+                            return (
+                              <SeasonCard key={season.id || idx} $active={isCurrent} onClick={() => !isCurrent && navigate(`/watch/${season.id}`)}>
+                                <img loading="lazy" src={imgUrl} alt={displayTitle} />
+                                <div className="title">{displayTitle}</div>
+                              </SeasonCard>
+                            );
+                          })}
+                        </SeasonsGrid>
+                      </SeasonsContainer>
+                    )}
+
+                    {(otherEdges.length > 0 || franchiseSeasons.length === 0) && (
+                      <div style={{ marginTop: franchiseSeasons.length > 0 ? '8px' : '0' }}>
+                        <div style={{ fontSize: '16px', fontWeight: 900, color: '#fff', marginBottom: '12px' }}>&gt; RELATED</div>
+                        <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
+                          {(otherEdges.length > 0 ? otherEdges : animeInfo.relations.edges).slice(0, 6).map((edge, idx) => {
+                            const item = edge.node;
+                            if (!item || item.type !== 'ANIME') return null;
+                            return (
+                              <RelatedCard key={item.id || idx} onClick={() => navigate(`/watch/${item.id}`)}>
+                                <img loading="lazy" src={item.coverImage?.large} alt={item.title?.english || item.title?.romaji} />
+                                <div className="info">
+                                  <div className="title">
+                                    <span className="blue-dot">•</span>
+                                    {item.title?.english || item.title?.romaji}
+                                  </div>
+                                  <div className="meta">
+                                    <span>{item.format}</span>
+                                    <span>📺 {item.episodes || '?'}</span>
+                                    <span>⭐ {item.meanScore || item.averageScore || '?'}</span>
+                                  </div>
+                                </div>
+                              </RelatedCard>
+                            );
+                          })}
+                        </div>
+                      </div>
+                    )}
+                  </>
+                );
+              })()}
             </RelatedSidebar>
-
           )}
 
         </DetailsWrapper>
@@ -3699,7 +3753,7 @@ const Watch = () => {
 
                   <RecImageWrapper>
 
-                    <img src={item.coverImage?.large} alt={item.title?.english || item.title?.romaji} />
+                    <img loading="lazy" src={item.coverImage?.large} alt={item.title?.english || item.title?.romaji} />
 
                     <HoverOverlay className="hover-overlay">
 
@@ -3765,4 +3819,6 @@ const Watch = () => {
 
 
 export default Watch;
+
+
 

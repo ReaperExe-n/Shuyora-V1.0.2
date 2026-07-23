@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
 import styled from 'styled-components';
 import { FiX, FiLock, FiUser } from 'react-icons/fi';
-import { FaDiscord, FaGoogle } from 'react-icons/fa';
+import { FaDiscord } from 'react-icons/fa';
+import { SiAnilist } from 'react-icons/si';
 import axios from 'axios';
 
 const ModalOverlay = styled.div`
@@ -208,8 +209,8 @@ const SocialBtn = styled.button`
     color: #5865F2;
   }
   
-  &.google svg {
-    color: #DB4437;
+  &.anilist svg {
+    color: #02A9FF;
   }
 `;
 
@@ -229,7 +230,7 @@ const AuthModal = ({ isOpen, onClose }) => {
     
     try {
       const endpoint = activeTab === 'login' ? '/login' : '/register';
-      const res = await axios.post(`http://${window.location.hostname}:4000${endpoint}`, { username, password });
+      const res = await axios.post(`http://${window.location.hostname}:4001${endpoint}`, { username, password });
       
       localStorage.setItem('isAuthenticated', 'true');
       localStorage.setItem('user', JSON.stringify(res.data.user));
@@ -242,7 +243,7 @@ const AuthModal = ({ isOpen, onClose }) => {
   };
 
   const handleOAuth = (provider) => {
-    window.location.href = `http://${window.location.hostname}:4000/auth/${provider}`;
+    window.location.href = `http://${window.location.hostname}:4001/auth/${provider}`;
   };
 
   return (
@@ -297,8 +298,8 @@ const AuthModal = ({ isOpen, onClose }) => {
           <SocialBtn type="button" className="discord" onClick={() => handleOAuth('discord')}>
             <FaDiscord size={18} /> Discord
           </SocialBtn>
-          <SocialBtn type="button" className="google" onClick={() => handleOAuth('google')}>
-            <FaGoogle size={18} /> Google
+          <SocialBtn type="button" className="anilist" onClick={() => handleOAuth('anilist')}>
+            <SiAnilist size={18} /> AniList
           </SocialBtn>
           
         </ModalBody>

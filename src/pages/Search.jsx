@@ -16,6 +16,14 @@ const PageContainer = styled.div`
 const ContentContainer = styled.div`
   padding: 80px 24px 24px 24px;
   display: flex;
+  
+  @media (max-width: 768px) {
+    padding: 110px 16px 16px 16px;
+  }
+  
+  @media (max-width: 480px) {
+    padding: 110px 12px 12px 12px;
+  }
 `;
 
 const MainContent = styled.div`
@@ -35,6 +43,12 @@ const FilterSection = styled.div`
   align-items: flex-end;
   gap: 12px;
   flex-wrap: wrap;
+  
+  @media (max-width: 480px) {
+    flex-direction: column;
+    gap: 8px;
+    align-items: stretch;
+  }
 `;
 
 const FilterGroup = styled.div`
@@ -57,6 +71,10 @@ const FilterLabel = styled.label`
 const SelectWrapper = styled.div`
   position: relative;
   width: 200px;
+  
+  @media (max-width: 480px) {
+    width: 100%;
+  }
   
   select {
     appearance: none;
@@ -248,7 +266,7 @@ const Loading = styled.div`
   color: var(--text-muted);
 `;
 
-const API_BASE = import.meta.env.VITE_API_BASE || `http://${window.location.hostname}:4000`;
+const API_BASE = import.meta.env.VITE_API_BASE || `http://${window.location.hostname}:4001`;
 
 const Search = () => {
   const { query } = useParams();
@@ -279,7 +297,7 @@ const Search = () => {
             MediaTagCollection { name }
           }
         `;
-        const res = await axios.post('https://graphql.anilist.co', { query });
+        const res = await axios.post('/anilist-graphql', { query });
         setAvailableGenres(res.data.data.GenreCollection || []);
         setAvailableTags(res.data.data.MediaTagCollection?.map(t => t.name) || []);
       } catch (err) {
@@ -319,7 +337,7 @@ const Search = () => {
       if (status) variables.status = status;
       if (format) variables.format = format;
 
-      const res = await axios.post('https://graphql.anilist.co', { query: queryGql, variables });
+      const res = await axios.post('/anilist-graphql', { query: queryGql, variables });
       const anilistResults = res.data.data.Page.media.map(a => ({
         id: a.id,
         title: a.title.english || a.title.romaji || a.title.native,
@@ -505,3 +523,6 @@ const Search = () => {
 };
 
 export default Search;
+
+
+

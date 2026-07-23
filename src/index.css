@@ -73,9 +73,9 @@ input {
   --bg-secondary: #f8f9fa;
   --bg-tertiary: #e9ecef;
   
-  --text-primary: #111111;
-  --text-secondary: #555555;
-  --text-muted: #444444;
+  --text-primary: #000000;
+  --text-secondary: #333333;
+  --text-muted: #555555;
   
   --border-color: rgba(0, 0, 0, 0.1);
   --border-color-strong: rgba(0, 0, 0, 0.15);
@@ -100,6 +100,8 @@ body {
 
 html {
     font-size: 16px;
+    overflow-x: hidden;
+    max-width: 100vw;
 }
 
 @media (max-width: 768px) {

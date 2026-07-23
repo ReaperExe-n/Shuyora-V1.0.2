@@ -74,7 +74,7 @@ const Hero = () => {
                   <FaPlayCircle />
                   Watch Now
                 </H.WatchLink>
-                <H.DetailLink to="/detail">
+                <H.DetailLink to={`/anime/${item.id}`}>
                   Detail <FaChevronRight size={12} />
                 </H.DetailLink>
               </H.WatchBtn>

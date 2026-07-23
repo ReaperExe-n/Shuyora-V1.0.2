@@ -9,13 +9,18 @@ export default defineConfig({
     port: 3000,
     proxy: {
       '/api': {
-        target: 'http://localhost:4000',
+        target: 'http://localhost:4001',
         changeOrigin: true,
       },
       '/jisho': {
         target: 'https://jisho.org',
         changeOrigin: true,
         rewrite: (path) => path.replace(/^\/jisho/, '')
+      },
+      '/anilist-graphql': {
+        target: 'https://graphql.anilist.co',
+        changeOrigin: true,
+        rewrite: (path) => path.replace(/^\/anilist-graphql/, ''),
       },
     },
   },

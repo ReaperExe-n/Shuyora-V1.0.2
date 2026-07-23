@@ -4,7 +4,7 @@ import styled, { keyframes } from 'styled-components';
 import NavBar from '../components/NavBar';
 import { FaUserCircle, FaCoins, FaGift, FaSignOutAlt, FaCamera } from 'react-icons/fa';
 
-const API_URL = `http://${window.location.hostname}:4000`;
+const API_URL = `http://${window.location.hostname}:4001`;
 
 const Container = styled.div`
   min-height: 100vh;
@@ -79,6 +79,10 @@ const AuthForm = styled.form`
   border-radius: 16px;
   border: 1px solid rgba(255,255,255,0.05);
   h2 { text-align: center; color: var(--primary-color); margin-top: 0; }
+
+  @media (max-width: 480px) {
+    padding: 20px 16px;
+  }
 `;
 
 const Input = styled.input`
@@ -207,6 +211,10 @@ const GachaArea = styled.div`
     position: absolute;
     top: 0; left: 0; right: 0; height: 2px;
     background: linear-gradient(90deg, transparent, var(--primary-color), transparent);
+  }
+
+  @media (max-width: 480px) {
+    padding: 16px;
   }
 `;
 
@@ -439,8 +447,8 @@ const Profile = () => {
         <ProfileCard>
           <UserInfo>
             <AvatarContainer onClick={() => fileInputRef.current.click()}>
-              <Avatar>
-                {user.avatar ? <img src={user.avatar} alt="Avatar" /> : user.username[0].toUpperCase()}
+              <Avatar style={{background: 'transparent'}}>
+                {user.avatar ? <img loading="lazy" src={user.avatar} alt="Avatar" style={{borderRadius: '50%'}} /> : <img loading="lazy" src={`https://api.dicebear.com/9.x/lorelei/svg?seed=${user.username}`} alt="Avatar" style={{borderRadius: '50%'}} />}
               </Avatar>
               <AvatarOverlay className="overlay">
                 <FaCamera />
@@ -471,7 +479,7 @@ const Profile = () => {
           ) : pulledItem ? (
             <div style={{ marginBottom: '30px', animation: 'fadeIn 0.5s' }}>
               <h4 style={{color: getRarityColor(pulledItem.rarity), fontSize: '18px', marginBottom: '15px'}}>You unlocked: {pulledItem.item_name || pulledItem.name}!</h4>
-              <img src={pulledItem.image_url} alt="item" style={{width: '120px', height: '120px', filter: `drop-shadow(0 0 20px ${getRarityColor(pulledItem.rarity)})`}} />
+              <img loading="lazy" src={pulledItem.image_url} alt="item" style={{width: '120px', height: '120px', filter: `drop-shadow(0 0 20px ${getRarityColor(pulledItem.rarity)})`}} />
             </div>
           ) : null}
 
@@ -489,7 +497,7 @@ const Profile = () => {
           <InventoryGrid>
             {user.inventory?.map((item, i) => (
               <ItemCard key={i} glow={getRarityColor(item.rarity)}>
-                <img src={item.image_url} alt={item.item_name || item.name} />
+                <img loading="lazy" src={item.image_url} alt={item.item_name || item.name} />
                 <h4>{item.item_name || item.name}</h4>
                 <p>{item.rarity}</p>
               </ItemCard>
@@ -502,3 +510,5 @@ const Profile = () => {
 };
 
 export default Profile;
+
+

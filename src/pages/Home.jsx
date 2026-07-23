@@ -5,7 +5,7 @@ import axios from 'axios';
 import { FaPlayCircle, FaInfoCircle, FaStar, FaClock, FaChevronLeft, FaChevronRight, FaChevronDown, FaTimes, FaReddit, FaDiscord, FaTwitter, FaPlay, FaCalendarAlt, FaClosedCaptioning, FaTiktok } from 'react-icons/fa';
 import NavBar from '../components/NavBar';
 
-const API_BASE = import.meta.env.VITE_API_BASE || `http://${window.location.hostname}:4000`;
+const API_BASE = import.meta.env.VITE_API_BASE || `http://${window.location.hostname}:4001`;
 
 const MainWrapper = styled.div`
   min-height: 100vh;
@@ -14,15 +14,23 @@ const MainWrapper = styled.div`
   font-family: 'Inter', sans-serif;
   overflow-x: hidden;
   padding-top: 61px;
+
+  @media (max-width: 768px) {
+    padding-top: 110px;
+  }
 `;
 
 const ContentContainer = styled.div`
   padding: 20px 24px;
-  max-width: 1600px;
+  max-width: 100%;
   margin: 0 auto;
   
   @media (max-width: 768px) {
     padding: 12px 16px;
+  }
+
+  @media (max-width: 480px) {
+    padding: 8px 12px;
   }
 `;
 
@@ -37,9 +45,14 @@ const HeroWrapper = styled.div`
   background: var(--bg-secondary);
 
   @media (max-width: 768px) {
-    height: 50vh;
-    min-height: 350px;
+    height: 45vh;
+    min-height: 280px;
     border-radius: 12px;
+  }
+
+  @media (max-width: 480px) {
+    height: 40vh;
+    min-height: 250px;
   }
 `;
 
@@ -86,26 +99,26 @@ const PaginationControls = styled.div`
 `;
 
 const PageArrow = styled.button`
-  background: var(--overlay);
-  border: 1px solid var(--border-color-strong);
-  color: var(--text-primary);
-  width: 32px;
-  height: 32px;
+  background: #2a2a2e;
+  border: none;
+  color: #fff;
+  width: 28px;
+  height: 28px;
   border-radius: 6px;
   display: flex;
   align-items: center;
   justify-content: center;
   cursor: pointer;
-  &:hover { background: rgba(255,255,255,0.1); }
+  transition: all 0.2s ease;
+  &:hover { background: #404044; }
+  &:disabled { opacity: 0.5; cursor: not-allowed; }
 `;
 
 const PageCount = styled.div`
-  background: var(--overlay);
-  border: 1px solid var(--border-color-strong);
-  padding: 6px 12px;
-  border-radius: 6px;
+  color: #fff;
   font-size: 13px;
   font-weight: 700;
+  padding: 0 8px;
 `;
 
 const HeroBottom = styled.div`
@@ -161,6 +174,10 @@ const HeroTitle = styled.h1`
   @media (max-width: 768px) {
     font-size: 28px;
   }
+
+  @media (max-width: 480px) {
+    font-size: 22px;
+  }
 `;
 
 const TagsRow = styled.div`
@@ -199,6 +216,7 @@ const HeroActions = styled.div`
   
   @media (max-width: 480px) {
     flex-wrap: wrap;
+    width: 100%;
   }
 `;
 
@@ -224,6 +242,12 @@ const GenresContainer = styled.div`
   align-items: center;
   gap: 10px;
   margin-top: 20px;
+
+  @media (max-width: 480px) {
+    .genre-arrow {
+      display: none;
+    }
+  }
 `;
 
 const GenreBtn = styled.button`
@@ -304,7 +328,7 @@ const HistoryCard = styled.div`
     flex: 0 0 calc(50% - 6px);
   }
   @media (max-width: 480px) {
-    flex: 0 0 85%;
+    flex: 0 0 75%;
   }
   
   &:hover {
@@ -410,6 +434,7 @@ const Banner = styled.div`
     flex-direction: column;
     text-align: center;
     gap: 20px;
+    padding: 16px;
   }
 `;
 
@@ -478,17 +503,19 @@ const TabsRow = styled.div`
 
 const TabsGroup = styled.div`
   display: flex;
-  background: var(--card-bg);
-  border-radius: 8px;
-  padding: 4px;
+  background: transparent;
   gap: 4px;
-  border: 1px solid rgba(255, 255, 255, 0.03);
+
+  @media (max-width: 480px) {
+    flex-wrap: wrap;
+    gap: 8px;
+  }
 `;
 
 const Tab = styled.button`
-  background: ${p => p.active ? '#35304a' : 'transparent'};
-  color: ${p => p.active ? '#b1a1ea' : '#888'};
-  padding: 10px 24px;
+  background: ${p => p.active ? '#a881e6' : '#2a2a2e'};
+  color: ${p => p.active ? '#ffffff' : '#a0a0a0'};
+  padding: 8px 16px;
   border: none;
   border-radius: 6px;
   font-size: 13px;
@@ -499,41 +526,70 @@ const Tab = styled.button`
   transition: all 0.2s ease;
   
   &:hover { 
-    color: ${p => p.active ? '#b1a1ea' : '#fff'};
-    background: ${p => p.active ? '#35304a' : 'rgba(255,255,255,0.02)'};
+    background: ${p => p.active ? '#a881e6' : '#3a3a3e'};
+    color: #fff;
+  }
+
+  @media (max-width: 480px) {
+    padding: 8px 14px;
+    font-size: 12px;
   }
 `;
 
 const PosterGrid = styled.div`
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
-  gap: 20px;
+  grid-template-columns: repeat(6, 1fr);
+  gap: 32px 24px;
 
+  @media (max-width: 1400px) {
+    grid-template-columns: repeat(5, 1fr);
+  }
+  @media (max-width: 1100px) {
+    grid-template-columns: repeat(4, 1fr);
+  }
   @media (max-width: 768px) {
-    grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
-    gap: 12px;
+    grid-template-columns: repeat(3, 1fr);
+  }
+  @media (max-width: 480px) {
+    grid-template-columns: repeat(2, 1fr);
   }
 `;
 
 const PosterCard = styled.div`
   cursor: pointer;
-  position: relative;
+  display: flex;
+  flex-direction: column;
+  transition: transform 0.25s ease, box-shadow 0.25s ease;
+  will-change: transform, box-shadow;
+
+  &:hover {
+    transform: scale(1.04);
+  }
   &:hover .hover-overlay { opacity: 1; }
+  &:hover .poster-img { filter: brightness(1.1); }
 `;
 
 const PosterImgWrapper = styled.div`
   width: 100%;
   aspect-ratio: 2/3;
-  border-radius: 12px;
+  border-radius: 16px;
   overflow: hidden;
   position: relative;
   margin-bottom: 12px;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+  transition: box-shadow 0.25s ease;
+
+  ${PosterCard}:hover & {
+    box-shadow: 0 8px 20px rgba(0,0,0,0.5);
+  }
 `;
 
 const PosterImg = styled.img`
   width: 100%;
   height: 100%;
   object-fit: cover;
+  transition: filter 0.25s ease;
+  display: block;
 `;
 
 const HoverOverlay = styled.div`
@@ -583,31 +639,44 @@ const DetailsBtn = styled.button`
 const PosterTitle = styled.div`
   font-size: 14px;
   font-weight: 700;
-  color: var(--text-primary);
-  white-space: nowrap;
+  color: #fff;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
   overflow: hidden;
   text-overflow: ellipsis;
-  display: flex;
-  align-items: center;
-  gap: 6px;
+  line-height: 1.3;
   margin-bottom: 6px;
 `;
 
-const StatusDot = styled.div`
-  width: 6px;
-  height: 6px;
+const StatusDot = styled.span`
+  display: inline-block;
+  width: 8px;
+  height: 8px;
   border-radius: 50%;
-  background: ${p => p.color || '#a881e6'};
-  flex-shrink: 0;
+  background: ${p => p.color || '#4ade80'};
+  margin-right: 6px;
+  vertical-align: middle;
 `;
 
 const PosterMeta = styled.div`
   display: flex;
   align-items: center;
-  gap: 10px;
-  font-size: 12px;
-  color: var(--text-secondary);
+  gap: 6px;
+  flex-wrap: wrap;
+`;
+
+const MetaBadge = styled.span`
+  background: #2a2a2e;
+  color: #a0a0a0;
+  font-size: 11px;
   font-weight: 600;
+  padding: 2px 6px;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  height: 20px;
 `;
 
 // --- SIDEBAR CARDS ---
@@ -683,7 +752,7 @@ const SmallMeta = styled.div`
 // --- MIDDLE LAYOUT (3 COLUMN) ---
 const MiddleLayout = styled.div`
   display: grid;
-  grid-template-columns: 1fr 1fr 320px;
+  grid-template-columns: 1.2fr 1.2fr 1fr;
   gap: 20px;
   margin-top: 40px;
   
@@ -834,7 +903,7 @@ const ScheduleContainer = styled.div`
 `;
 
 const ScheduleHeader = styled.div`
-  font-size: 11px;
+  font-size: 13px;
   color: var(--text-secondary);
   margin-bottom: 2px;
   text-transform: uppercase;
@@ -843,7 +912,7 @@ const ScheduleHeader = styled.div`
 `;
 
 const ScheduleTitle = styled.div`
-  font-size: 20px;
+  font-size: 24px;
   font-weight: 900;
   color: var(--text-primary);
   margin-bottom: 16px;
@@ -857,18 +926,24 @@ const ScheduleDays = styled.div`
   gap: 12px;
   margin-bottom: 8px;
   color: var(--text-muted);
-  font-size: 20px;
+  font-size: 24px;
   font-weight: 900;
   text-transform: uppercase;
   
   .active {
     color: var(--text-primary);
-    font-size: 28px;
+    font-size: 36px;
+  }
+
+  @media (max-width: 480px) {
+    font-size: 18px;
+    gap: 8px;
+    .active { font-size: 26px; }
   }
 `;
 
 const ScheduleDate = styled.div`
-  font-size: 13px;
+  font-size: 15px;
   font-weight: 600;
   color: var(--text-secondary);
   letter-spacing: 0.5px;
@@ -937,6 +1012,7 @@ const Home = () => {
   const [trending, setTrending] = useState([]);
   const [popular, setPopular] = useState([]);
   const [activeTab, setActiveTab] = useState('NEWEST');
+  const [tabPage, setTabPage] = useState(1);
   const [currentHeroIndex, setCurrentHeroIndex] = useState(0);
   
   const [watchHistory, setWatchHistory] = useState([]);
@@ -1014,11 +1090,11 @@ const Home = () => {
   useEffect(() => {
     const interval = setInterval(() => {
       setBannerIndex(prev => (prev + 1) % bannerData.length);
-    }, 4000);
+    }, 4001);
     return () => clearInterval(interval);
   }, []);
 
-  const genres = ['Comedy', 'Drama', 'Ecchi', 'Fantasy', 'Horror', 'Mahou Shoujo', 'Mecha', 'Music', 'Mystery', 'Psychological', 'Romance', 'Sci-Fi', 'Slice of Life', 'Sports'];
+  const genres = ['Action', 'Adventure', 'Comedy', 'Drama', 'Ecchi', 'Fantasy', 'Horror', 'Isekai', 'Mahou Shoujo', 'Magic', 'Mecha', 'Music', 'Mystery', 'Psychological', 'Romance', 'Sci-Fi', 'Seinen', 'Shounen', 'Slice of Life', 'Sports', 'Supernatural', 'Thriller'];
 
   useEffect(() => {
     document.title = 'Home - Shuyora';
@@ -1032,7 +1108,7 @@ const Home = () => {
           if (parsed.popular) setPopular(parsed.popular);
         }
 
-        const API_BASE = import.meta.env.VITE_API_BASE || `http://${window.location.hostname}:4000`;
+        const API_BASE = import.meta.env.VITE_API_BASE || `http://${window.location.hostname}:4001`;
         const response = await axios.get(`${API_BASE}/api/home`);
         const data = response.data?.data; // axios.data then graphql.data
 
@@ -1254,13 +1330,13 @@ const Home = () => {
         )}
 
         <GenresContainer>
-          <ArrowBtn style={{width: 28, height: 28}} onClick={() => scrollGenres('left')}><FaChevronLeft size={10}/></ArrowBtn>
+          <ArrowBtn className="genre-arrow" style={{width: 28, height: 28}} onClick={() => scrollGenres('left')}><FaChevronLeft size={10}/></ArrowBtn>
           <div ref={genresRef} style={{display:'flex', gap: 10, overflowX: 'auto', flex: 1, scrollbarWidth: 'none', msOverflowStyle: 'none'}}>
             {genres.map(g => (
               <GenreBtn key={g} onClick={() => navigate('/search', { state: { genre: g } })}>{g}</GenreBtn>
             ))}
           </div>
-          <ArrowBtn style={{width: 28, height: 28}} onClick={() => scrollGenres('right')}><FaChevronRight size={10}/></ArrowBtn>
+          <ArrowBtn className="genre-arrow" style={{width: 28, height: 28}} onClick={() => scrollGenres('right')}><FaChevronRight size={10}/></ArrowBtn>
         </GenresContainer>
 
         {watchHistory.length > 0 && (
@@ -1318,7 +1394,7 @@ const Home = () => {
             {justFinished.map(anime => (
               <ListCard key={anime.id} bg={anime.bannerImage || anime.coverImage?.extraLarge} onClick={() => navigate(`/watch/${anime.id}`)}>
                 <ListCardContent>
-                  <ListCardThumb src={anime.coverImage?.large} />
+                  <ListCardThumb loading="lazy" src={anime.coverImage?.large} />
                   <ListCardInfo>
                     <ListCardTitle><StatusDot color="#0ea5e9"/> {anime.title?.english || anime.title?.romaji}</ListCardTitle>
                     <ListCardMeta>
@@ -1339,7 +1415,7 @@ const Home = () => {
             {topMovies.map(anime => (
               <ListCard key={anime.id} bg={anime.bannerImage || anime.coverImage?.extraLarge} onClick={() => navigate(`/watch/${anime.id}`)}>
                 <ListCardContent>
-                  <ListCardThumb src={anime.coverImage?.large} />
+                  <ListCardThumb loading="lazy" src={anime.coverImage?.large} />
                   <ListCardInfo>
                     <ListCardTitle><StatusDot color="#0ea5e9"/> {anime.title?.english || anime.title?.romaji}</ListCardTitle>
                     <ListCardMeta>
@@ -1386,22 +1462,38 @@ const Home = () => {
           <MainColumn>
             <TabsRow>
               <TabsGroup>
-                <Tab active={activeTab === 'NEWEST'} onClick={() => setActiveTab('NEWEST')}>NEWEST</Tab>
-                <Tab active={activeTab === 'POPULAR'} onClick={() => setActiveTab('POPULAR')}>POPULAR</Tab>
-                <Tab active={activeTab === 'TOP RATED'} onClick={() => setActiveTab('TOP RATED')}>TOP RATED</Tab>
+                <Tab active={activeTab === 'NEWEST'} onClick={() => { setActiveTab('NEWEST'); setTabPage(1); }}>NEWEST</Tab>
+                <Tab active={activeTab === 'POPULAR'} onClick={() => { setActiveTab('POPULAR'); setTabPage(1); }}>POPULAR</Tab>
+                <Tab active={activeTab === 'TOP RATED'} onClick={() => { setActiveTab('TOP RATED'); setTabPage(1); }}>TOP RATED</Tab>
               </TabsGroup>
               <PaginationControls>
-                <PageArrow><FaChevronLeft size={10}/></PageArrow>
-                <span style={{fontSize: 13, fontWeight: 700}}>1</span>
-                <PageArrow><FaChevronRight size={10}/></PageArrow>
+                <PageArrow 
+                  onClick={() => setTabPage(p => Math.max(1, p - 1))} 
+                  style={{ opacity: tabPage === 1 ? 0.5 : 1, cursor: tabPage === 1 ? 'not-allowed' : 'pointer' }}
+                >
+                  <FaChevronLeft size={10}/>
+                </PageArrow>
+                <span style={{fontSize: 13, fontWeight: 700}}>{tabPage}</span>
+                <PageArrow 
+                  onClick={() => {
+                    const maxPage = Math.ceil(displayList.length / 10) || 1;
+                    setTabPage(p => Math.min(maxPage, p + 1));
+                  }} 
+                  style={{ 
+                    opacity: tabPage >= (Math.ceil(displayList.length / 10) || 1) ? 0.5 : 1, 
+                    cursor: tabPage >= (Math.ceil(displayList.length / 10) || 1) ? 'not-allowed' : 'pointer' 
+                  }}
+                >
+                  <FaChevronRight size={10}/>
+                </PageArrow>
               </PaginationControls>
             </TabsRow>
             
             <PosterGrid>
-              {displayList.slice(0, 10).map(anime => (
+              {displayList.slice((tabPage - 1) * 12, tabPage * 12).map(anime => (
                 <PosterCard key={anime.id} onClick={() => navigate(`/watch/${anime.id}`)}>
                   <PosterImgWrapper>
-                    <PosterImg src={anime.coverImage?.large} alt={anime.title?.english} />
+                    <PosterImg className="poster-img" loading="lazy" src={anime.coverImage?.large} alt={anime.title?.english} />
                     <HoverOverlay className="hover-overlay">
                       <PlayNowBtn><FaPlay size={10}/> Play Now</PlayNowBtn>
                       <DetailsBtn onClick={(e) => { e.stopPropagation(); navigate(`/anime/${anime.id}`); }}>Details</DetailsBtn>
@@ -1412,10 +1504,10 @@ const Home = () => {
                     {anime.title?.english || anime.title?.romaji}
                   </PosterTitle>
                   <PosterMeta>
-                    <span>{anime.format || 'TV'}</span>
-                    <span>{anime.startDate?.year || 2026}</span>
-                    <span style={{display:'flex', alignItems:'center', gap: 4}}>📺 {anime.episodes || '?'}/12</span>
-                    <span style={{display:'flex', alignItems:'center', gap: 4}}>⭐ {anime.averageScore}</span>
+                    <MetaBadge>{anime.format || 'TV'}</MetaBadge>
+                    <MetaBadge>{anime.startDate?.year || 2026}</MetaBadge>
+                    <MetaBadge><FaClosedCaptioning size={10}/> {anime.episodes || '?'}</MetaBadge>
+                    <MetaBadge><FaStar size={10} color="#f59e0b" style={{marginRight: -2}}/> {anime.averageScore || '?'}</MetaBadge>
                   </PosterMeta>
                 </PosterCard>
               ))}
@@ -1428,7 +1520,7 @@ const Home = () => {
               <SidebarTitle><FaChevronRight size={10}/> TOP AIRING</SidebarTitle>
               {trending.slice(0, 5).map(anime => (
                 <SmallCard key={anime.id} onClick={() => navigate(`/watch/${anime.id}`)}>
-                  <SmallThumb src={anime.coverImage?.large} />
+                  <SmallThumb loading="lazy" src={anime.coverImage?.large} />
                   <SmallInfo>
                     <SmallTitle>
                       <StatusDot color="#4ade80" /> 
@@ -1449,7 +1541,7 @@ const Home = () => {
               <SidebarTitle>🔥 UPCOMING</SidebarTitle>
               {trending.slice(5, 10).map(anime => (
                 <SmallCard key={anime.id} onClick={() => navigate(`/watch/${anime.id}`)}>
-                  <SmallThumb src={anime.coverImage?.large} />
+                  <SmallThumb loading="lazy" src={anime.coverImage?.large} />
                   <SmallInfo>
                     <SmallTitle>
                       <StatusDot color="#f59e0b" /> 
@@ -1473,3 +1565,6 @@ const Home = () => {
 };
 
 export default Home;
+
+
+

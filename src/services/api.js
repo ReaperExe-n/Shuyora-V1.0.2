@@ -1,7 +1,7 @@
 import axios from 'axios';
 axios.defaults.withCredentials = true;
 
-const API_BASE = import.meta.env.VITE_API_BASE || `http://${window.location.hostname}:4000`;
+const API_BASE = import.meta.env.VITE_API_BASE || `http://${window.location.hostname}:4001`;
 
 export const fetchAnimeInfo = async (animeId) => {
   const res = await axios.get(`${API_BASE}/info/${animeId}`);

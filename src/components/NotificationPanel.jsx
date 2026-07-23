@@ -183,7 +183,7 @@ const NotificationPanel = ({ isOpen, onClose, user, setShowAuthModal }) => {
     if (!user) return;
     setLoading(true);
     try {
-      const API_BASE = import.meta.env.VITE_API_BASE || 'http://localhost:8000';
+      const API_BASE = import.meta.env.VITE_API_BASE || `http://${window.location.hostname}:8000`;
       const res = await axios.get(`${API_BASE}/recent?page=1`);
       setNotifications(res.data.results || []);
     } catch (err) {

@@ -1,4 +1,4 @@
-import React from 'react'
+﻿import React from 'react'
 import { T } from './tredingposts.style'
 import { FaComment } from 'react-icons/fa'
 import Killuasmall from '../../assets/images/Killua-small.jpeg'
@@ -23,7 +23,7 @@ const TrendingPosts = () => {
             fries are cold and its hard to enjoy
           </T.CardText>
           <T.CardProfile>
-            <img
+            <img loading="lazy"
               src={Killuasmall}
               alt=""
               width={30}
@@ -39,3 +39,4 @@ const TrendingPosts = () => {
 }
 
 export default TrendingPosts
+

@@ -57,12 +57,20 @@ const TrackInfo = styled.div`
     font-weight: 700;
     color: var(--primary-color);
     margin-bottom: 5px;
+
+    @media (max-width: 480px) {
+      font-size: 1.2rem;
+    }
   }
 
   .theme-name {
     font-size: 1.1rem;
     color: #ccc;
     margin-bottom: 15px;
+
+    @media (max-width: 480px) {
+      font-size: 1rem;
+    }
   }
 `;
 
@@ -112,6 +120,11 @@ const PlaylistSection = styled.div`
   height: 600px;
   display: flex;
   flex-direction: column;
+
+  @media (max-width: 480px) {
+    height: auto;
+    max-height: 400px;
+  }
 `;
 
 const PlaylistHeader = styled.div`

@@ -23,11 +23,12 @@ const History = lazy(() => import("./pages/History"))
 const Jukebox = lazy(() => import("./pages/Jukebox"))
 const WatchParty = lazy(() => import("./pages/WatchParty"))
 const Profile = lazy(() => import("./pages/Profile"))
+import Footer from './components/Footer';
 const App = () => {
   return (
     <ErrorBoundary>
       <ThemeProvider>
-        <Toaster position="bottom-right" toastOptions={{ style: { background: '#333', color: '#fff' } }} />
+        <Toaster position="bottom-center" toastOptions={{ style: { background: '#333', color: '#fff' } }} />
         <BrowserRouter>
           <Routes>
           <Route
@@ -134,6 +135,7 @@ const App = () => {
           <Route path="/oauth-callback" element={<OAuthCallback />} />
           <Route path="/*" element={<Error />} />
         </Routes>
+        <Footer />
       </BrowserRouter>
     </ThemeProvider>
     </ErrorBoundary>

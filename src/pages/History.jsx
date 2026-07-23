@@ -95,6 +95,10 @@ const Grid = styled.div`
     grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
     gap: 12px;
   }
+  
+  @media (max-width: 480px) {
+    grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
+  }
 `;
 
 const HistoryCard = styled.div`
@@ -133,6 +137,10 @@ const HistoryCard = styled.div`
       
       &:hover {
         background: rgba(255,255,255,0.2);
+      }
+      
+      @media (max-width: 768px) {
+        opacity: 1;
       }
     }
     
@@ -356,7 +364,7 @@ const History = () => {
                 {group.items.map((item, i) => (
                   <HistoryCard key={i} onClick={() => navigate(`/watch/${item.animeId}`)}>
                     <div className="thumb-wrapper">
-                      <img src={item.image} alt={item.title} />
+                      <img loading="lazy" src={item.image} alt={item.title} />
                       <button className="remove-btn" onClick={(e) => removeItem(e, i, item)}>
                         <FiX />
                       </button>
@@ -379,3 +387,5 @@ const History = () => {
 };
 
 export default History;
+
+

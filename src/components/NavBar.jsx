@@ -22,7 +22,7 @@ const NavWrapper = styled.nav`
   box-sizing: border-box;
 
   @media (max-width: 768px) {
-    padding: 10px 16px;
+    padding: 0 12px;
     flex-wrap: wrap;
     gap: 10px;
   }
@@ -134,13 +134,20 @@ const IconButton = styled.button`
   &:hover { background: var(--btn-hover); color: var(--text-primary); }
 `;
 
+const MobileSearchButton = styled(IconButton)`
+  display: none;
+  @media (max-width: 768px) {
+    display: flex;
+  }
+`;
+
 const NavRight = styled.div`
   display: flex;
   align-items: center;
   gap: 12px;
 
   @media (max-width: 768px) {
-    gap: 8px;
+    gap: 4px;
   }
 `;
 
@@ -164,7 +171,8 @@ const DropdownWrapper = styled.div`
   position: absolute;
   top: calc(100% + 8px);
   left: 0;
-  width: 400px;
+  width: calc(100vw - 32px);
+  max-width: 400px;
   background: var(--bg-secondary);
   border: 1px solid var(--border-color-strong);
   border-radius: 8px;
@@ -281,7 +289,7 @@ const ViewAllBtn = styled.button`
   &:hover { text-decoration: underline; }
 `;
 
-const API_BASE = 'http://localhost:8000';
+const API_BASE = `http://${window.location.hostname}:8000`;
 
 const ProfileDropdown = styled.div`
   position: absolute;
@@ -302,7 +310,7 @@ const ProfileDropdown = styled.div`
 
   @media (max-width: 480px) {
     width: 240px;
-    right: -10px;
+    right: 0;
   }
 `;
 
@@ -436,7 +444,7 @@ const NavBar = () => {
         return;
       }
       try {
-        const API_BASE = import.meta.env.VITE_API_BASE || `http://${window.location.hostname}:4000`;
+        const API_BASE = import.meta.env.VITE_API_BASE || `http://${window.location.hostname}:4001`;
         const res = await axios.get(`${API_BASE}/api/search?q=${encodeURIComponent(searchQuery.trim())}`);
         setSuggestions(res.data || []);
         setIsDropdownOpen(true);
@@ -573,7 +581,7 @@ const NavBar = () => {
               </DropdownWrapper>
             )}
           </div>
-          <IconButton onClick={handleSearchSubmit}><FaSearch size={16}/></IconButton>
+          <MobileSearchButton onClick={handleSearchSubmit}><FaSearch size={16}/></MobileSearchButton>
           <IconButton onClick={handleRandomAnime} title="Watch Random Anime"><FaRandom size={16}/></IconButton>
         </NavCenter>
         <NavRight>
@@ -582,14 +590,16 @@ const NavBar = () => {
           </div>
           <IconButton title="Notifications" onClick={() => setShowNotifications(true)}><FaBell size={18} /></IconButton>
           <AvatarWrapper id="profile-menu-container">
-            <Avatar onClick={() => setShowProfileMenu(!showProfileMenu)} style={{cursor: 'pointer'}}>
+            <Avatar onClick={() => setShowProfileMenu(!showProfileMenu)} style={{cursor: 'pointer', background: 'transparent'}}>
               {user ? (
                 user.avatar ? (
-                  <img src={user.avatar} alt="Profile" style={{width: '100%', height: '100%', objectFit: 'cover', borderRadius: '50%'}} />
+                  <img loading="lazy" src={user.avatar} alt="Profile" style={{width: '100%', height: '100%', objectFit: 'cover', borderRadius: '50%'}} />
                 ) : (
-                  user.username[0].toUpperCase()
+                  <img loading="lazy" src={`https://api.dicebear.com/9.x/lorelei/svg?seed=${user.username}`} alt="Profile" style={{width: '100%', height: '100%', objectFit: 'cover', borderRadius: '50%'}} />
                 )
-              ) : 'M'}
+              ) : (
+                <img loading="lazy" src={`https://api.dicebear.com/9.x/lorelei/svg?seed=Guest`} alt="Profile" style={{width: '100%', height: '100%', objectFit: 'cover', borderRadius: '50%'}} />
+              )}
             </Avatar>
             {showProfileMenu && (
               <ProfileDropdown>
@@ -597,8 +607,8 @@ const NavBar = () => {
                   <>
                     <ProfileHeader>
                       <HeaderInfo>
-                        <Avatar style={{width: '42px', height: '42px', fontSize: '18px', fontWeight: 'bold', borderRadius: '8px', background: '#333'}}>
-                          {user.avatar ? <img src={user.avatar} alt="Profile" style={{width: '100%', height: '100%', objectFit: 'cover', borderRadius: '8px'}} /> : user.username[0].toUpperCase()}
+                        <Avatar style={{width: '42px', height: '42px', fontSize: '18px', fontWeight: 'bold', borderRadius: '8px', background: 'transparent'}}>
+                          {user.avatar ? <img loading="lazy" src={user.avatar} alt="Profile" style={{width: '100%', height: '100%', objectFit: 'cover', borderRadius: '8px'}} /> : <img loading="lazy" src={`https://api.dicebear.com/9.x/lorelei/svg?seed=${user.username}`} alt="Profile" style={{width: '100%', height: '100%', objectFit: 'cover', borderRadius: '8px'}} />}
                         </Avatar>
                         <HeaderName style={{fontSize: '16px'}}>{user.username}</HeaderName>
                       </HeaderInfo>
@@ -642,3 +652,5 @@ const NavBar = () => {
 };
 
 export default NavBar;
+
+

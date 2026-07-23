@@ -184,6 +184,10 @@ const Title = styled.h1`
   color: #fff;
   margin: 0;
   line-height: 1.1;
+
+  @media (max-width: 480px) {
+    font-size: 22px;
+  }
 `;
 
 const TagRow = styled.div`
@@ -207,6 +211,15 @@ const TabsContainer = styled.div`
   border: 1px solid rgba(255,255,255,0.05);
   border-radius: 8px;
   overflow: hidden;
+
+  @media (max-width: 480px) {
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+    &::-webkit-scrollbar {
+      display: none;
+    }
+  }
 `;
 
 const Tab = styled.button`
@@ -229,6 +242,12 @@ const Tab = styled.button`
   &:hover {
     background: rgba(255,255,255,0.08);
     color: #fff;
+  }
+
+  @media (max-width: 480px) {
+    padding: 10px 14px;
+    font-size: 13px;
+    white-space: nowrap;
   }
 `;
 
@@ -277,6 +296,10 @@ const Grid = styled.div`
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
   gap: 16px;
+
+  @media (max-width: 480px) {
+    grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
+  }
 `;
 
 const Card = styled(Link)`
@@ -561,7 +584,7 @@ const Info = () => {
       if (id) {
         try {
           // Temporarily mock if backend isn't up, but try API first
-          const res = await axios.get(`http://${window.location.hostname}:4000/api/reviews/${id}`);
+          const res = await axios.get(`http://${window.location.hostname}:4001/api/reviews/${id}`);
           setReviews(res.data);
         } catch (err) {
           console.log('Database not connected yet, falling back to local for now.');
@@ -577,7 +600,7 @@ const Info = () => {
     if (userRating === 0 || userReviewText.trim() === '') return;
     
     try {
-      const res = await axios.post('http://localhost:4000/api/reviews', {
+      const res = await axios.post("http://$(${window.location.hostname}):4001/api/reviews", {
         animeId: id,
         author: 'You (Local)',
         rating: userRating,
@@ -612,7 +635,7 @@ const Info = () => {
     const fetchInfo = async () => {
       setLoading(true);
       try {
-        const response = await axios.post('https://graphql.anilist.co', {
+        const response = await axios.post('/anilist-graphql', {
           query: ANIME_QUERY,
           variables: { id: parseInt(id) }
         });
@@ -651,7 +674,7 @@ const Info = () => {
       
       <ContentWrapper>
         <Sidebar>
-          <Poster src={data.coverImage?.extraLarge} alt={title} />
+          <Poster loading="lazy" src={data.coverImage?.extraLarge} alt={title} />
           
           <WatchNowBtn onClick={() => navigate(`/watch/${id}`)}>
             <FaPlayCircle size={20} /> WATCH NOW
@@ -730,7 +753,7 @@ const Info = () => {
                   <Grid>
                     {relatedMedia.slice(0, 6).map(anime => (
                       <Card key={anime.id} to={`/anime/${anime.id}`}>
-                        <CardImg src={anime.coverImage?.extraLarge} alt={anime.title?.english || anime.title?.romaji} />
+                        <CardImg loading="lazy" src={anime.coverImage?.extraLarge} alt={anime.title?.english || anime.title?.romaji} />
                         <CardTitle>{anime.title?.english || anime.title?.romaji}</CardTitle>
                       </Card>
                     ))}
@@ -744,7 +767,7 @@ const Info = () => {
                   <Grid>
                     {recs.slice(0, 6).map(anime => (
                       <Card key={anime.id} to={`/anime/${anime.id}`}>
-                        <CardImg src={anime.coverImage?.extraLarge} alt={anime.title?.english || anime.title?.romaji} />
+                        <CardImg loading="lazy" src={anime.coverImage?.extraLarge} alt={anime.title?.english || anime.title?.romaji} />
                         <CardTitle>{anime.title?.english || anime.title?.romaji}</CardTitle>
                       </Card>
                     ))}
@@ -759,7 +782,7 @@ const Info = () => {
               {data.characters?.edges?.map((edge, i) => (
                 <CharCard key={i}>
                   <CharHalf>
-                    <CharImg src={edge.node.image?.large} alt={edge.node.name?.full} />
+                    <CharImg loading="lazy" src={edge.node.image?.large} alt={edge.node.name?.full} />
                     <CharInfo>
                       <span className="name">{edge.node.name?.full}</span>
                       <span className="role">{edge.role}</span>
@@ -772,7 +795,7 @@ const Info = () => {
                         <span className="name">{edge.voiceActors[0].name?.full}</span>
                         <span className="role">Japanese</span>
                       </CharInfo>
-                      <CharImg src={edge.voiceActors[0].image?.large} alt={edge.voiceActors[0].name?.full} />
+                      <CharImg loading="lazy" src={edge.voiceActors[0].image?.large} alt={edge.voiceActors[0].name?.full} />
                     </CharHalf>
                   )}
                 </CharCard>
@@ -857,3 +880,5 @@ const Info = () => {
 };
 
 export default Info;
+
+

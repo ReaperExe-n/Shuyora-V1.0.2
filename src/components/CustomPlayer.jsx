@@ -198,6 +198,12 @@ const RightControls = styled.div`
   display: flex;
   align-items: center;
   gap: 16px;
+
+  .desktop-only {
+    @media (max-width: 1024px) {
+      display: none;
+    }
+  }
 `;
 
 const ControlIcon = styled.button`
@@ -234,6 +240,10 @@ const VolumeContainer = styled.div`
     width: 80px;
     accent-color: #a881e6;
     cursor: pointer;
+  }
+
+  @media (max-width: 1024px) {
+    display: none;
   }
 `;
 
@@ -416,6 +426,50 @@ const SkipOverlayButton = styled.button`
   }
 `;
 
+const DoubleTapZone = styled.div`
+  position: absolute;
+  top: 0;
+  ${p => p.side === 'left' ? 'left: 0;' : 'right: 0;'}
+  width: 40%;
+  height: 100%;
+  z-index: 4;
+  display: none;
+
+  @media (max-width: 1024px) {
+    display: block;
+  }
+`;
+
+const SeekIndicator = styled.div`
+  position: absolute;
+  top: 50%;
+  ${p => p.side === 'left' ? 'left: 20%;' : 'right: 20%;'}
+  transform: translate(${p => p.side === 'left' ? '-50%' : '50%'}, -50%);
+  background: rgba(0, 0, 0, 0.6);
+  backdrop-filter: blur(4px);
+  color: #fff;
+  border-radius: 50%;
+  width: 60px;
+  height: 60px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  font-size: 11px;
+  font-weight: 700;
+  pointer-events: none;
+  z-index: 6;
+  animation: seekPop 0.5s ease-out forwards;
+
+  svg { font-size: 18px; margin-bottom: 2px; }
+
+  @keyframes seekPop {
+    0% { opacity: 0; transform: translate(${p => p.side === 'left' ? '-50%' : '50%'}, -50%) scale(0.5); }
+    30% { opacity: 1; transform: translate(${p => p.side === 'left' ? '-50%' : '50%'}, -50%) scale(1.1); }
+    100% { opacity: 0; transform: translate(${p => p.side === 'left' ? '-50%' : '50%'}, -50%) scale(1); }
+  }
+`;
+
 const formatTime = (timeInSeconds) => {
   if (isNaN(timeInSeconds)) return "00:00";
   const m = Math.floor(timeInSeconds / 60);
@@ -423,7 +477,7 @@ const formatTime = (timeInSeconds) => {
   return `${m}:${s < 10 ? '0' : ''}${s}`;
 };
 
-const CustomPlayer = ({ streamData, skipTimes = null, autoPlay = true, title = "", audioLang = 'sub', hasDub = false, onAudioChange = () => {}, autoSkip = false, onVideoEnd = () => {}, onProgress = () => {}, onToggleTheater = null, isSyncMode = false, socket = null, roomId = null, isHost = false, initialTime = 0 }) => {
+const CustomPlayer = ({ streamData, skipTimes = null, autoPlay = true, title = "", audioLang = 'sub', hasDub = false, onAudioChange = () => {}, autoSkip = false, onVideoEnd = () => {}, onProgress = () => {}, onToggleTheater = null, isSyncMode = false, socket = null, roomId = null, isHost = false, initialTime = 0, onError = null }) => {
   const videoRef = useRef(null);
   const wrapperRef = useRef(null);
   const hlsRef = useRef(null);
@@ -455,8 +509,10 @@ const CustomPlayer = ({ streamData, skipTimes = null, autoPlay = true, title = "
   const [availableQualities, setAvailableQualities] = useState([]);
   const [alwaysHD, setAlwaysHD] = useState(true);
   const [playbackSpeed, setPlaybackSpeed] = useState(1);
+  const [seekIndicator, setSeekIndicator] = useState(null); // { side: 'left'|'right', seconds: 10 }
   
   let idleTimeout = useRef(null);
+  const doubleTapRef = useRef({ lastTap: 0, lastSide: null, timer: null });
 
   const autoPlayRef = useRef(autoPlay);
   const autoSkipRef = useRef(autoSkip);
@@ -609,7 +665,10 @@ const CustomPlayer = ({ streamData, skipTimes = null, autoPlay = true, title = "
         setCurrentQuality('Auto'); // HLS starts in auto
       });
       hls.on(Hls.Events.ERROR, (event, data) => {
-        if (data.fatal) setLoading(false);
+        if (data.fatal) {
+           setLoading(false);
+           if (onError) onError();
+        }
       });
 
       hls.loadSource(source.url);
@@ -626,7 +685,10 @@ const CustomPlayer = ({ streamData, skipTimes = null, autoPlay = true, title = "
         if (autoPlayRef.current) video.play().catch(e => console.log("Autoplay blocked:", e));
       };
       video.addEventListener('loadedmetadata', onMeta, { once: true });
-      video.addEventListener('error', () => setLoading(false), { once: true });
+      video.addEventListener('error', () => {
+         setLoading(false);
+         if (onError) onError();
+      }, { once: true });
       // Fallback timeout in case event doesn't fire
       setTimeout(() => setLoading(false), 3000);
     }
@@ -848,6 +910,36 @@ const CustomPlayer = ({ streamData, skipTimes = null, autoPlay = true, title = "
     }
   };
 
+  // Double-tap to seek (mobile gesture)
+  const handleDoubleTap = (side) => {
+    const now = Date.now();
+    const dt = doubleTapRef.current;
+    const timeSinceLastTap = now - dt.lastTap;
+
+    if (timeSinceLastTap < 300 && dt.lastSide === side) {
+      // Double tap detected
+      clearTimeout(dt.timer);
+      const seekAmount = side === 'left' ? -10 : 10;
+      if (videoRef.current) {
+        videoRef.current.currentTime = Math.max(0, Math.min(videoRef.current.duration, videoRef.current.currentTime + seekAmount));
+      }
+      setSeekIndicator({ side, seconds: 10 });
+      setTimeout(() => setSeekIndicator(null), 500);
+      dt.lastTap = 0;
+      dt.lastSide = null;
+    } else {
+      // First tap — wait to see if it's a double tap
+      dt.lastTap = now;
+      dt.lastSide = side;
+      dt.timer = setTimeout(() => {
+        // Single tap — toggle play/pause
+        togglePlay();
+        dt.lastTap = 0;
+        dt.lastSide = null;
+      }, 300);
+    }
+  };
+
   const togglePiP = async () => {
     if (document.pictureInPictureElement) {
       await document.exitPictureInPicture();
@@ -1055,6 +1147,16 @@ const CustomPlayer = ({ streamData, skipTimes = null, autoPlay = true, title = "
         onDoubleClick={toggleFullscreen}
         crossOrigin="anonymous" 
       />
+
+      {/* Double-tap seek zones for mobile */}
+      <DoubleTapZone side="left" onClick={() => handleDoubleTap('left')} />
+      <DoubleTapZone side="right" onClick={() => handleDoubleTap('right')} />
+      {seekIndicator && (
+        <SeekIndicator side={seekIndicator.side}>
+          {seekIndicator.side === 'left' ? <FaUndo /> : <FaRedo />}
+          {seekIndicator.seconds}s
+        </SeekIndicator>
+      )}
       
       {!isPlaying && !loading && (
         <CenterPlayButton onClick={togglePlay}>
@@ -1170,19 +1272,19 @@ const CustomPlayer = ({ streamData, skipTimes = null, autoPlay = true, title = "
           <RightControls>
             {(!isSyncMode || isHost) && (
               <>
-                <ControlIcon onClick={() => skip(-10)}><FaUndo size={14}/></ControlIcon>
-                <ControlIcon onClick={() => skip(10)}><FaRedo size={14}/></ControlIcon>
-                <ControlIcon title="Closed Captions"><FaClosedCaptioning size={16}/></ControlIcon>
+                <ControlIcon className="desktop-only" onClick={() => skip(-10)}><FaUndo size={14}/></ControlIcon>
+                <ControlIcon className="desktop-only" onClick={() => skip(10)}><FaRedo size={14}/></ControlIcon>
+                <ControlIcon className="desktop-only" title="Closed Captions"><FaClosedCaptioning size={16}/></ControlIcon>
               </>
             )}
             <ControlIcon onClick={handleDownload} title="Download"><FaDownload size={14}/></ControlIcon>
-            <ControlIcon onClick={handleScreenshot} title="Screenshot"><FaCamera size={14}/></ControlIcon>
+            <ControlIcon className="desktop-only" onClick={handleScreenshot} title="Screenshot"><FaCamera size={14}/></ControlIcon>
             {onToggleTheater && (
-              <ControlIcon onClick={onToggleTheater} title="Theater Mode"><FaDesktop size={14}/></ControlIcon>
+              <ControlIcon className="desktop-only" onClick={onToggleTheater} title="Theater Mode"><FaDesktop size={14}/></ControlIcon>
             )}
             <ControlIcon onClick={() => { setShowSettings(!showSettings); setActiveMenu('main'); }} title="Settings"><FaCog size={14}/></ControlIcon>
-            <ControlIcon title="Cast"><FaChromecast size={14}/></ControlIcon>
-            <ControlIcon onClick={togglePiP} title="Mini Player"><FaClone size={14}/></ControlIcon>
+            <ControlIcon className="desktop-only" title="Cast"><FaChromecast size={14}/></ControlIcon>
+            <ControlIcon className="desktop-only" onClick={togglePiP} title="Mini Player"><FaClone size={14}/></ControlIcon>
             <ControlIcon onClick={toggleFullscreen}>
               {isFullscreen ? <FaCompress size={14}/> : <FaExpand size={14}/>}
             </ControlIcon>

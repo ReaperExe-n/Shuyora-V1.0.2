@@ -141,7 +141,7 @@ const Main = () => {
                 the fries are cold and its hard to enjoy
               </M.CardText>
               <M.CardProfile>
-                <img
+                <img loading="lazy"
                   src={zorosmall}
                   alt=""
                   width={30}
@@ -163,3 +163,5 @@ const Main = () => {
 }
 
 export default Main
+
+

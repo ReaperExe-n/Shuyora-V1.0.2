@@ -8,7 +8,7 @@ import { FaUser, FaPlay, FaSync, FaCopy, FaUsers, FaSearch, FaTimes } from 'reac
 import { Link, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 
-const API_BASE = import.meta.env.VITE_API_BASE || `http://${window.location.hostname}:4000`;
+const API_BASE = import.meta.env.VITE_API_BASE || `http://${window.location.hostname}:4001`;
 
 const Container = styled.div`
   min-height: 100vh;
@@ -48,6 +48,10 @@ const RightColumn = styled.div`
   gap: 20px;
   height: 100%;
   overflow: hidden;
+
+  @media (max-width: 1000px) {
+    width: 100%;
+  }
 `;
 
 const ChatSection = styled.div`
@@ -98,6 +102,11 @@ const ChatInput = styled.form`
 const SetupCard = styled.div`
   max-width: 500px; margin: 100px auto; background: var(--bg-secondary); padding: 30px; border-radius: 12px;
   box-shadow: 0 10px 30px rgba(0,0,0,0.5); text-align: center; border: 1px solid rgba(255,255,255,0.1);
+
+  @media (max-width: 480px) {
+    margin: 20px auto;
+    padding: 16px;
+  }
 `;
 
 const Input = styled.input`
@@ -177,7 +186,7 @@ const CloseBtn = styled.button`
   }
 `;
 
-const SOCKET_URL = import.meta.env.VITE_API_BASE || `http://${window.location.hostname}:4000`;
+const SOCKET_URL = import.meta.env.VITE_API_BASE || `http://${window.location.hostname}:4001`;
 
 const WatchParty = () => {
   const [socket, setSocket] = useState(null);
@@ -380,7 +389,7 @@ const WatchParty = () => {
                 <SearchGrid>
                   {searchResults.map(res => (
                     <AnimeResult key={res.id} onClick={() => selectAnime(res)}>
-                      <img src={res.coverImage?.large} alt={res.title?.english || res.title?.romaji || 'Anime'} />
+                      <img loading="lazy" src={res.coverImage?.large} alt={res.title?.english || res.title?.romaji || 'Anime'} />
                       <p>{(res.title?.english || res.title?.romaji || 'Unknown').substring(0,25)}</p>
                     </AnimeResult>
                   ))}
@@ -441,3 +450,5 @@ const WatchParty = () => {
 };
 
 export default WatchParty;
+
+
